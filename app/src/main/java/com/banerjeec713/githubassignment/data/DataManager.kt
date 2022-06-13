@@ -1,11 +1,9 @@
 package com.banerjeec713.githubassignment.data
 
 import android.content.Context
-import android.util.Log
 import com.banerjeec713.githubassignment.IPreference.SharedPreferencesHelper
 import com.banerjeec713.githubassignment.data.RetrofitManager.Companion.instance
-import com.banerjeec713.githubassignment.data.models.RepoModel
-import com.banerjeec713.githubassignment.utils.Constants.TAG
+import com.banerjeec713.githubassignment.data.models.TrendingItemModel
 import io.reactivex.Observable
 
 class DataManager private constructor(context: Context) {
@@ -18,11 +16,8 @@ class DataManager private constructor(context: Context) {
             sharedPreferencesHelper.date = date
         }
 
-    fun getRepos(map: Map<String, String>): Observable<RepoModel> {
-        for ((key, value) in map) {
-            Log.d(TAG, "getRepos: $key = $value")
-        }
-        return retrofitManager.getRepos(map)
+    fun getTrendingRepos(): Observable<List<TrendingItemModel>>{
+        return retrofitManager.getTrendingRepos()
     }
 
     companion object {

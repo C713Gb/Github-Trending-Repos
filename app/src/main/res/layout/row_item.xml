@@ -1,80 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:gravity="center_vertical">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/avatarImg"
-        android:layout_width="100dp"
-        android:layout_height="match_parent" />
-
-    <LinearLayout
-        android:id="@+id/mLinear"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/avatarImg"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="10dp"
+        app:cardElevation="6dp">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Title"
-            android:textSize="16sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:elevation="10dp">
 
-        <ImageView
-            android:id="@+id/StarImage"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:background="@color/teal_200" />
+            <ImageView
+                android:id="@+id/avatarImg"
+                android:layout_width="100dp"
+                android:layout_height="match_parent" />
 
-        <TextView
-            android:id="@+id/starView"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Stars" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/mLinear"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/avatarImg"
+                android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignTop="@+id/mLinear"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/avatarImg"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:text="Desc" />
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="Title"
+                    android:textSize="16sp" />
 
-    <LinearLayout
-        android:id="@+id/mSecLinear"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_below="@+id/description"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/avatarImg"
-        android:orientation="horizontal">
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/langView"
-            android:layout_width="120dp"
-            android:layout_height="match_parent"
-            android:text="Lang" />
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignTop="@+id/mLinear"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@+id/avatarImg"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="Desc" />
 
-        <TextView
-            android:id="@+id/licenseView"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:gravity="end"
-            android:maxLines="1"
-            android:paddingEnd="5dp"
-            android:text="License" />
-    </LinearLayout>
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
 </RelativeLayout>

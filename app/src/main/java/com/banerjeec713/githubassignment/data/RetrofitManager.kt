@@ -1,13 +1,13 @@
 package com.banerjeec713.githubassignment.data
 
-import com.banerjeec713.githubassignment.data.models.RepoModel
+import com.banerjeec713.githubassignment.data.models.TrendingItemModel
 import com.banerjeec713.githubassignment.data.network.RetrofitClient.create
 import io.reactivex.Observable
 
 class RetrofitManager private constructor() {
-    fun getRepos(map: Map<String, String>): Observable<RepoModel> {
+    fun getTrendingRepos(): Observable<List<TrendingItemModel>>{
         val api = create()
-        return api.getRepos(map)
+        return api.getTrendingRepos()
     }
 
     companion object {

@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -24,11 +23,9 @@ import com.banerjeec713.githubassignment.data.DataManager;
 import com.banerjeec713.githubassignment.ui.base.BaseFragment;
 import com.banerjeec713.githubassignment.utils.Constants;
 import com.banerjeec713.githubassignment.utils.Util;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
@@ -38,11 +35,7 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
     private MainAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private MainViewModel viewModel;
-    //    @BindView(R.id.actionButton)
-    FloatingActionButton mFloatingActionButton;
-    //    @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
-    //    @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     public static MainFragment getInstance() {
@@ -91,7 +84,6 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
         mView = inflater.inflate(R.layout.main_fragment, container, false);
         ButterKnife.bind(this, mView);
         mSwipeRefreshLayout = mView.findViewById(R.id.swipeRefreshLayout);
-        mFloatingActionButton = mView.findViewById(R.id.actionButton);
         mRecyclerView = mView.findViewById(R.id.recyclerView);
 
         initView();
@@ -129,7 +121,6 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-        mFloatingActionButton.setOnClickListener(this);
         mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
@@ -140,9 +131,9 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
         int scrollPosition = 0;
         mRecyclerView.scrollToPosition(scrollPosition);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(App.Companion.getInstance(), DividerItemDecoration.VERTICAL));
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(App.Companion.getInstance(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addOnScrollListener(mOnScrollListener);
+//        mRecyclerView.addOnScrollListener(mOnScrollListener);
     }
 
     private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {

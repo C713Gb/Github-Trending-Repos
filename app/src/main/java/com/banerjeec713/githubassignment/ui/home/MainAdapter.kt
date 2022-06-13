@@ -1,18 +1,17 @@
 package com.banerjeec713.githubassignment.ui.home
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.banerjeec713.githubassignment.R
-import com.banerjeec713.githubassignment.data.models.ItemModel
+import com.banerjeec713.githubassignment.data.models.TrendingItemModel
+import com.banerjeec713.githubassignment.utils.Constants.TAG
 import com.bumptech.glide.Glide
 import java.util.*
 
@@ -26,25 +25,13 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(mViewHolder: ViewHolder, position: Int) {
 
-        if (selectedPosition == position)
-            mViewHolder.itemView.setBackgroundColor(Color.parseColor("#000000"))
-        else
-            mViewHolder.itemView.setBackgroundColor(Color.parseColor("#ffffff"))
-
-        val data = mData!![position]
-        val mCount =
-            if (data.star_count >= 1000) (data.star_count / 1000).toString() + "k" else data.star_count.toString()
-        if (data.name != null) mViewHolder.setTitle(data.name)
-        if (data.description != null) mViewHolder.setDescription(data.description)
-        if (data.owners != null) mViewHolder.setAvatar(data.owners.avatar_url)
-        if (data.language != null) mViewHolder.setLanguage(data.language)
-        if (data.licenses != null) mViewHolder.setLicense(data.licenses.name)
-        mViewHolder.setStarCount(mCount)
-
         mViewHolder.itemView.setOnClickListener {
             selectedPosition = mViewHolder.adapterPosition
             notifyDataSetChanged()
         }
+
+        mViewHolder.bind(selectedPosition, mData!![position])
+
     }
 
     override fun getItemCount(): Int {
@@ -54,10 +41,9 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
     class ViewHolder(mView: View) : RecyclerView.ViewHolder(mView) {
         private val mTitle: TextView
         private val mDescription: TextView
-        private val mStar: TextView
-        private val mLang: TextView
-        private val mAvatatImg: ImageView
-        private val mLicenseView: TextView
+        private val mAvatarImg: ImageView
+        private val mCard: CardView
+
         fun setTitle(title: String?) {
             mTitle.text = title
         }
@@ -66,32 +52,32 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
             mDescription.text = description
         }
 
-        fun setStarCount(count: String?) {
-            mStar.text = count
-        }
-
-        fun setLanguage(language: String?) {
-            mLang.text = language
-        }
-
         fun setAvatar(avatar: String?) {
             Glide.with(itemView.context)
                 .load(avatar)
-                .into(mAvatatImg)
+                .into(mAvatarImg)
         }
 
-        fun setLicense(license: String?) {
-            mLicenseView.text = license
+        fun bind(selectedPosition: Int, itemModel: TrendingItemModel) {
+            val data = itemModel
+            setTitle(data.name)
+            setDescription(data.description)
+            setAvatar(data.avatar)
+
+            if (selectedPosition == adapterPosition) {
+                Log.d(TAG, "onBindViewHolder: $selectedPosition")
+                mCard.setCardBackgroundColor(Color.parseColor("#03DAC5"))
+            }
+            else{
+                mCard.setCardBackgroundColor(Color.parseColor("#ffffff"))
+            }
         }
 
         init {
-            mView.setOnClickListener { view: View -> copyToClip(view.context, adapterPosition) }
             mTitle = mView.findViewById(R.id.title)
             mDescription = mView.findViewById(R.id.description)
-            mAvatatImg = mView.findViewById(R.id.avatarImg)
-            mStar = mView.findViewById(R.id.starView)
-            mLang = mView.findViewById(R.id.langView)
-            mLicenseView = mView.findViewById(R.id.licenseView)
+            mAvatarImg = mView.findViewById(R.id.avatarImg)
+            mCard = mView.findViewById(R.id.cardView)
         }
     }
 
@@ -100,19 +86,13 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    fun addData(mData: List<ItemModel>?) {
+    fun addData(mData: List<TrendingItemModel>?) {
         Companion.mData!!.addAll(mData!!)
         notifyDataSetChanged()
     }
 
     companion object {
-        private var mData: MutableList<ItemModel>? = ArrayList()
+        private var mData: MutableList<TrendingItemModel>? = ArrayList()
         private var selectedPosition = -1
-        fun copyToClip(context: Context, position: Int) {
-            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("Git URL", mData!![position].clone_url)
-            clipboard.setPrimaryClip(clip)
-            Toast.makeText(context, "Link Copied to the Clipboard", Toast.LENGTH_SHORT).show()
-        }
     }
 }
