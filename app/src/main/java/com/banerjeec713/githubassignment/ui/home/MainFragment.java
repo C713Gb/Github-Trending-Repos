@@ -26,7 +26,6 @@ import com.banerjeec713.githubassignment.utils.Util;
 
 import java.util.Objects;
 
-import butterknife.ButterKnife;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MainFragment extends BaseFragment<MainViewModel> implements View.OnClickListener,
@@ -82,7 +81,6 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
                              Bundle savedInstanceState) {
         Log.d(Constants.TAG, "onCreateView: ");
         mView = inflater.inflate(R.layout.main_fragment, container, false);
-        ButterKnife.bind(this, mView);
         mSwipeRefreshLayout = mView.findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = mView.findViewById(R.id.recyclerView);
 
@@ -112,7 +110,7 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
 
         updateRefreshLayout(true);
         displaySnackbar(false, "Loading...");
-        viewModel.loadRepos(DataManager.Companion.getInstance(App.Companion.getInstance()).getDate());
+        viewModel.loadRepos();
 
     }
 
@@ -148,7 +146,7 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
                     Constants.PAGE_COUNT++;
                     displaySnackbar(false, "Loading...");
                     Log.d(Constants.TAG, "LOADING: "+Constants.PAGE_COUNT);
-                    viewModel.loadRepos(DataManager.Companion.getInstance(App.Companion.getInstance()).getDate());
+                    viewModel.loadRepos();
 
                 } else
                     displaySnackbar(true, "No internet Connection ! ");
@@ -177,7 +175,7 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
         if (Util.INSTANCE.isNetworkAvailable(App.Companion.getInstance())) {
             showError(View.GONE);
             displaySnackbar(false, "Loading...");
-            viewModel.loadRepos(DataManager.Companion.getInstance(App.Companion.getInstance()).getDate());
+            viewModel.loadRepos();
         } else {
             showError(View.VISIBLE);
             displaySnackbar(true, "No Internet Connection :(");
@@ -193,7 +191,7 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
         if (Util.INSTANCE.isNetworkAvailable(App.Companion.getInstance())) {
             showError(View.GONE);
             displaySnackbar(false, "Loading...");
-            viewModel.loadRepos(DataManager.Companion.getInstance(App.Companion.getInstance()).getDate());
+            viewModel.loadRepos();
         } else {
             updateRefreshLayout(false);
             showError(View.VISIBLE);

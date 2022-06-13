@@ -7,8 +7,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.banerjeec713.githubassignment.App
 import com.banerjeec713.githubassignment.R
 import com.banerjeec713.githubassignment.data.DataManager
@@ -17,17 +15,17 @@ import com.banerjeec713.githubassignment.utils.Util
 
 class MainActivity : BaseActivity<MainViewModel>() {
 
-    @BindView(R.id.main_layout)
     private lateinit var mainLayout: LinearLayout
-
-    @BindView(R.id.imgview)
     private lateinit var imageView: ImageView
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ButterKnife.bind(this)
+
+        mainLayout = findViewById(R.id.main_layout)
+        imageView = findViewById(R.id.imgview)
+
         if (App.instance?.let { Util.isNetworkAvailable(it) } == true){
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, MainFragment.getInstance())
