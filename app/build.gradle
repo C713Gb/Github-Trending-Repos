@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.banerjeec713.githubassignment"
-        minSdk 21
+        minSdk 23
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -68,10 +68,6 @@ dependencies {
     // UI
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
     implementation "com.google.android.material:material:$rootProject.materialVersion"
-
-    //butter knife
-//    implementation "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
-//    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
 
     // Testing
     testImplementation "junit:junit:$rootProject.junitVersion"

@@ -14,8 +14,14 @@ import com.banerjeec713.githubassignment.data.models.TrendingItemModel
 import com.banerjeec713.githubassignment.utils.Constants.TAG
 import com.bumptech.glide.Glide
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+
+    companion object {
+        private var mData: MutableList<TrendingItemModel>? = ArrayList()
+        private var selectedPosition = -1
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val mView = LayoutInflater.from(parent.context)
@@ -31,7 +37,16 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
         }
 
         mViewHolder.bind(selectedPosition, mData!![position])
+    }
 
+    fun filterList(list: ArrayList<TrendingItemModel>){
+        mData = list
+        notifyDataSetChanged()
+    }
+
+    fun resetList(list: ArrayList<TrendingItemModel>) {
+        mData = list
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
@@ -65,7 +80,6 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
             setAvatar(data.avatar)
 
             if (selectedPosition == adapterPosition) {
-                Log.d(TAG, "onBindViewHolder: $selectedPosition")
                 mCard.setCardBackgroundColor(Color.parseColor("#03DAC5"))
             }
             else{
@@ -91,8 +105,4 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    companion object {
-        private var mData: MutableList<TrendingItemModel>? = ArrayList()
-        private var selectedPosition = -1
-    }
 }

@@ -1,20 +1,12 @@
 package com.banerjeec713.githubassignment.data
 
 import android.content.Context
-import com.banerjeec713.githubassignment.IPreference.SharedPreferencesHelper
 import com.banerjeec713.githubassignment.data.RetrofitManager.Companion.instance
 import com.banerjeec713.githubassignment.data.models.TrendingItemModel
 import io.reactivex.Observable
 
 class DataManager private constructor(context: Context) {
-    private val retrofitManager: RetrofitManager
-    private val sharedPreferencesHelper: SharedPreferencesHelper
-
-    var date: String?
-        get() = sharedPreferencesHelper.date
-        set(date) {
-            sharedPreferencesHelper.date = date
-        }
+    private val retrofitManager: RetrofitManager = instance
 
     fun getTrendingRepos(): Observable<List<TrendingItemModel>>{
         return retrofitManager.getTrendingRepos()
@@ -30,8 +22,4 @@ class DataManager private constructor(context: Context) {
         }
     }
 
-    init {
-        retrofitManager = instance
-        sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context)
-    }
 }

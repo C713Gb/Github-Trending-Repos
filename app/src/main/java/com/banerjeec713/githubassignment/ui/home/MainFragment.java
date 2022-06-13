@@ -20,22 +20,25 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.banerjeec713.githubassignment.App;
 import com.banerjeec713.githubassignment.R;
 import com.banerjeec713.githubassignment.data.DataManager;
+import com.banerjeec713.githubassignment.data.models.TrendingItemModel;
 import com.banerjeec713.githubassignment.ui.base.BaseFragment;
 import com.banerjeec713.githubassignment.utils.Constants;
 import com.banerjeec713.githubassignment.utils.Util;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.Objects;
 
 
-@RequiresApi(api = Build.VERSION_CODES.M)
-public class MainFragment extends BaseFragment<MainViewModel> implements View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener {
+public class MainFragment extends BaseFragment<MainViewModel> implements SwipeRefreshLayout.OnRefreshListener {
     private View mView;
     private MainAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private MainViewModel viewModel;
     RecyclerView mRecyclerView;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    private static final ArrayList<TrendingItemModel> trendingItemModels = new ArrayList();
 
     public static MainFragment getInstance() {
         return new MainFragment();
@@ -95,6 +98,8 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
         Log.d(Constants.TAG, "onStart: "+viewModel.stateInitialized());
         super.onStart();
         viewModel.getRepos().observe(this, itemModels -> {
+            trendingItemModels.clear();
+            trendingItemModels.addAll(itemModels);
             mAdapter.addData(itemModels);
             updateRefreshLayout(false);
         });
@@ -104,9 +109,6 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
                 updateRefreshLayout(false);
             }
         });
-
-        if (DataManager.Companion.getInstance(App.Companion.getInstance()).getDate() == null)
-            DataManager.Companion.getInstance(App.Companion.getInstance()).setDate(Util.INSTANCE.getDefaultDate());
 
         updateRefreshLayout(true);
         displaySnackbar(false, "Loading...");
@@ -129,58 +131,8 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
         int scrollPosition = 0;
         mRecyclerView.scrollToPosition(scrollPosition);
         mRecyclerView.setAdapter(mAdapter);
-//        mRecyclerView.addItemDecoration(new DividerItemDecoration(App.Companion.getInstance(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        mRecyclerView.addOnScrollListener(mOnScrollListener);
     }
-
-    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            int totalItemCount = mLayoutManager.getItemCount();
-            int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
-
-            if (totalItemCount > 1 && lastVisibleItem >= totalItemCount - 1) {
-                if (Util.INSTANCE.isNetworkAvailable(App.Companion.getInstance())) {
-                    Constants.PAGE_COUNT++;
-                    displaySnackbar(false, "Loading...");
-                    Log.d(Constants.TAG, "LOADING: "+Constants.PAGE_COUNT);
-                    viewModel.loadRepos();
-
-                } else
-                    displaySnackbar(true, "No internet Connection ! ");
-            }
-        }
-    };
-
-    @Override
-    public void onClick(View view) {
-        Log.d(Constants.TAG, "onClick: ");
-        new DatePickerDialog(view.getContext(), date,
-                Util.INSTANCE.getYear(DataManager.Companion.getInstance(App.Companion.getInstance()).getDate()),
-                Util.INSTANCE.getMonth(DataManager.Companion.getInstance(App.Companion.getInstance()).getDate()) - 1,
-                Util.INSTANCE.getDay(DataManager.Companion.getInstance(App.Companion.getInstance()).getDate()))
-                .show();
-    }
-
-    public DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
-        Log.d(Constants.TAG, "date: ");
-
-        DataManager.Companion.getInstance(App.Companion.getInstance()).setDate(Util.INSTANCE.formatDate(year, monthOfYear + 1, dayOfMonth));
-
-        mAdapter.clearData();
-        Constants.PAGE_COUNT = 1;
-
-        if (Util.INSTANCE.isNetworkAvailable(App.Companion.getInstance())) {
-            showError(View.GONE);
-            displaySnackbar(false, "Loading...");
-            viewModel.loadRepos();
-        } else {
-            showError(View.VISIBLE);
-            displaySnackbar(true, "No Internet Connection :(");
-        }
-    };
 
     @Override
     public void onRefresh() {
@@ -221,4 +173,21 @@ public class MainFragment extends BaseFragment<MainViewModel> implements View.On
         viewModel.onClear();
     }
 
+    ArrayList<TrendingItemModel> list = new ArrayList<>();
+    public void filter(@NotNull String name) {
+        Log.d(Constants.TAG, "search: "+name);
+        list.clear();
+        for(int i = 0; i < trendingItemModels.size(); i++){
+            TrendingItemModel item = trendingItemModels.get(i);
+            if(item.getName().contains(name)){
+                list.add(item);
+            }
+        }
+        mAdapter.filterList(list);
+    }
+
+    public void reset() {
+        list.clear();
+        mAdapter.resetList(trendingItemModels);
+    }
 }
